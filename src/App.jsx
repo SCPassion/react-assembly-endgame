@@ -25,14 +25,16 @@ export default function () {
     )
   })
 
-  const hiddenWordElements = [...hiddenWord].map((letter) => (
-    <div
-      key={nanoid()}
-      className="border[#F9F4DA] flex h-[40px] w-[40px] items-center justify-center border-b-2 bg-[#323232] text-[#F9F4DA]"
-    >
-      {letter.toUpperCase()}
-    </div>
-  ))
+  const hiddenWordElements = [...hiddenWord].map((letter) => {
+    return (
+      <div
+        key={nanoid()}
+        className="border[#F9F4DA] flex h-[40px] w-[40px] items-center justify-center border-b-2 bg-[#323232] text-[#F9F4DA]"
+      >
+        {guessedLetters.includes(letter) && letter.toUpperCase()}
+      </div>
+    )
+  })
 
   const allLetterElements = [...allLetters].map((letter) => {
     const bgClass = !guessedLetters.includes(letter)
