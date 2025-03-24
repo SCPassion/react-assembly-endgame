@@ -1,16 +1,17 @@
-import { languages } from "./languages.js";
-import { nanoid } from "nanoid";
-import React from "react";
+import { languages } from "./languages.js"
+import { nanoid } from "nanoid"
+import React from "react"
 
 export default function () {
-  const [hiddenWord, setHiddenWord] = React.useState("react");
-
-  const allLetters = "abcdefghijklmnopqrstuvwxyz";
+  const [hiddenWord, setHiddenWord] = React.useState("react")
+  const [guessedLetters, setGuessLetters] = React.useState([])
+  console.log(guessedLetters)
+  const allLetters = "abcdefghijklmnopqrstuvwxyz"
   const languageElements = languages.map((language) => {
     const style = {
       backgroundColor: language.backgroundColor,
       color: language.color,
-    };
+    }
 
     return (
       <span
@@ -20,8 +21,8 @@ export default function () {
       >
         {language.name}
       </span>
-    );
-  });
+    )
+  })
 
   const hiddenWordElements = [...hiddenWord].map((letter) => (
     <div
@@ -30,21 +31,27 @@ export default function () {
     >
       {letter.toUpperCase()}
     </div>
-  ));
+  ))
 
   const allLetterElements = [...allLetters].map((letter) => {
-    const style = { backgroundColor: "#FCBA29" };
+    const style = { backgroundColor: "#FCBA29" }
 
     return (
       <button
         style={style}
-        className="h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7]"
+        className="hover:text-1xl h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7] transition-all duration-250 hover:scale-110"
         key={nanoid()}
+        onClick={() => handleKeyboardClick(letter)}
       >
         {letter.toUpperCase()}
       </button>
-    );
-  });
+    )
+  })
+
+  function handleKeyboardClick(letter) {
+    !guessedLetters.includes(letter) &&
+      setGuessLetters([...guessedLetters, letter])
+  }
 
   return (
     <>
@@ -81,5 +88,5 @@ export default function () {
         </button>
       </footer>
     </>
-  );
+  )
 }
