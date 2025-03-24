@@ -1,11 +1,12 @@
 import { languages } from "./languages.js"
 import { nanoid } from "nanoid"
 import React from "react"
+import clsx from "clsx"
 
 export default function () {
   const [hiddenWord, setHiddenWord] = React.useState("react")
   const [guessedLetters, setGuessLetters] = React.useState([])
-  console.log(guessedLetters)
+
   const allLetters = "abcdefghijklmnopqrstuvwxyz"
   const languageElements = languages.map((language) => {
     const style = {
@@ -15,9 +16,9 @@ export default function () {
 
     return (
       <span
-        key={nanoid()}
         style={style}
-        className="flex h-[24.75px] items-center rounded-sm px-[8px] text-[12px] font-bold"
+        key={nanoid()}
+        className={`flex h-[24.75px] items-center rounded-sm px-[8px] text-[12px] font-bold`}
       >
         {language.name}
       </span>
@@ -34,12 +35,15 @@ export default function () {
   ))
 
   const allLetterElements = [...allLetters].map((letter) => {
-    const style = { backgroundColor: "#FCBA29" }
+    const bgClass = !guessedLetters.includes(letter)
+      ? "bg-[#FCBA29]"
+      : hiddenWord.includes(letter)
+        ? "bg-[#10A95B]"
+        : "bg-[#EC5D49]"
 
     return (
       <button
-        style={style}
-        className="hover:text-1xl h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7] transition-all duration-250 hover:scale-110"
+        className={`hover:text-1xl ${bgClass} h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7] transition-all duration-250 hover:scale-110`}
         key={nanoid()}
         onClick={() => handleKeyboardClick(letter)}
       >
