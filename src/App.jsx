@@ -2,6 +2,7 @@ import { languages } from "./languages.js"
 import { nanoid } from "nanoid"
 import React from "react"
 import { getFarewellText, getRandomWord } from "./utils.js"
+import Header from "./components/Header.jsx"
 
 export default function () {
   const allLetters = "abcdefghijklmnopqrstuvwxyz"
@@ -120,15 +121,7 @@ export default function () {
 
   return (
     <>
-      <header className="w-[352px] text-center">
-        <h1 className="mb-[4px] text-[20px] font-semibold text-[#F9F4DA]">
-          Assembly: Endgame
-        </h1>
-        <p className="text-[14px] text-[#8E8E8E]">
-          Guess the word in under 8 attempts to keep the programming world safe
-          from Assembly!
-        </p>
-      </header>
+      <Header />
 
       <main className="flex flex-col items-center gap-[16px]">
         <section
