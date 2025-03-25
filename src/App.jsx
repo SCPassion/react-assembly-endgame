@@ -7,9 +7,10 @@ export default function () {
   const allLetters = "abcdefghijklmnopqrstuvwxyz"
 
   // State
-  const [hiddenWord, setHiddenWord] = React.useState("orangel")
+  const [hiddenWord, setHiddenWord] = React.useState(() => getRandomWord())
   const [guessedLetters, setGuessLetters] = React.useState([])
 
+  //console.log(hiddenWord)
   // Derived State variable
   const numberOfIncorrectGuesses = guessedLetters.filter(
     (letter) => !hiddenWord.includes(letter),
@@ -82,6 +83,11 @@ export default function () {
       setGuessLetters([...guessedLetters, letter])
   }
 
+  function handleNewGame() {
+    setHiddenWord(getRandomWord())
+    setGuessLetters([])
+  }
+
   const messageBGColor = isGameWon
     ? "bg-[#10A95B]"
     : isGameLost
@@ -135,9 +141,14 @@ export default function () {
           {allLetterElements}
         </section>
 
-        <button className="flex h-[40px] w-[228px] cursor-pointer items-center justify-center rounded-[4px] border-[1px] border-[#D7D7D7] bg-[#11B5E5]">
-          New Game
-        </button>
+        {(isGameLost || isGameWon) && (
+          <button
+            className="flex h-[40px] w-[228px] cursor-pointer items-center justify-center rounded-[4px] border-[1px] border-[#D7D7D7] bg-[#11B5E5]"
+            onClick={handleNewGame}
+          >
+            New Game
+          </button>
+        )}
       </footer>
     </>
   )
