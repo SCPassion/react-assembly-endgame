@@ -10,7 +10,9 @@ export default function () {
   const [hiddenWord, setHiddenWord] = React.useState(() => getRandomWord())
   const [guessedLetters, setGuessLetters] = React.useState([])
 
-  //console.log(hiddenWord)
+  // ref
+  const ref = React.useRef(null)
+
   // Derived State variable
   const numberOfIncorrectGuesses = guessedLetters.filter(
     (letter) => !hiddenWord.includes(letter),
@@ -23,6 +25,10 @@ export default function () {
   const isGameWon = [...hiddenWord].every((letter) =>
     guessedLetters.includes(letter),
   )
+
+  if (isGameWon || isGameLost) {
+    ref.current !== null && ref.current.focus()
+  }
 
   // current guess is incorrect?
   const isCurrentGameIncorrect =
@@ -61,17 +67,18 @@ export default function () {
   })
 
   const allLetterElements = [...allLetters].map((letter) => {
-    const bgClass = !guessedLetters.includes(letter)
+    const decoClass = !guessedLetters.includes(letter)
       ? "bg-[#FCBA29]"
       : hiddenWord.includes(letter)
         ? "bg-[#10A95B]"
-        : "bg-[#EC5D49]"
+        : "bg-[#EC5D49] text-rose-900 font-bold text-xl"
 
     return (
       <button
-        className={`hover:text-1xl ${bgClass} h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7] transition-all duration-250 hover:scale-110`}
+        className={`hover:text-1xl ${decoClass} h-[40px] w-[40px] cursor-pointer rounded-[4px] border-[1px] border-[#D7D7D7] transition-all duration-250 hover:scale-110 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:hover:scale-100`}
         key={nanoid()}
         onClick={() => handleKeyboardClick(letter)}
+        disabled={isGameLost || isGameWon}
       >
         {letter.toUpperCase()}
       </button>
@@ -143,8 +150,9 @@ export default function () {
 
         {(isGameLost || isGameWon) && (
           <button
-            className="flex h-[40px] w-[228px] cursor-pointer items-center justify-center rounded-[4px] border-[1px] border-[#D7D7D7] bg-[#11B5E5]"
+            className="flex h-[40px] w-[228px] cursor-pointer items-center justify-center rounded-[4px] border-[1px] border-[#D7D7D7] bg-[#11B5E5] focus:border-4 focus:border-rose-400"
             onClick={handleNewGame}
+            ref={ref}
           >
             New Game
           </button>
