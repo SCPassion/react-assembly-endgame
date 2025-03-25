@@ -1,13 +1,13 @@
 import { languages } from "./languages.js"
 import { nanoid } from "nanoid"
 import React from "react"
-import clsx from "clsx"
+import { getFarewellText, getRandomWord } from "./utils.js"
 
 export default function () {
   const allLetters = "abcdefghijklmnopqrstuvwxyz"
 
   // State
-  const [hiddenWord, setHiddenWord] = React.useState("react")
+  const [hiddenWord, setHiddenWord] = React.useState("orangel")
   const [guessedLetters, setGuessLetters] = React.useState([])
 
   // Derived State variable
@@ -22,6 +22,12 @@ export default function () {
   const isGameWon = [...hiddenWord].every((letter) =>
     guessedLetters.includes(letter),
   )
+
+  // current guess is incorrect?
+  const isCurrentGameIncorrect =
+    guessedLetters.length === 0
+      ? null
+      : !hiddenWord.includes(guessedLetters.at(-1))
 
   const languageElements = languages.map((language, index) => {
     const style = {
@@ -80,7 +86,9 @@ export default function () {
     ? "bg-[#10A95B]"
     : isGameLost
       ? "bg-[#BA2A2A]"
-      : null
+      : isCurrentGameIncorrect
+        ? "bg-[#7A5EA7]"
+        : null
 
   const messagelogElement = isGameWon ? (
     <>
@@ -92,6 +100,8 @@ export default function () {
       <h2>Game over!</h2>
       <p>You lose! Better start learning Assembly 😭</p>
     </>
+  ) : isCurrentGameIncorrect ? (
+    <h2>{getFarewellText(languages[numberOfIncorrectGuesses - 1].name)}</h2>
   ) : null
 
   return (
