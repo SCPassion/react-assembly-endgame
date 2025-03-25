@@ -4,21 +4,38 @@ import React from "react"
 import clsx from "clsx"
 
 export default function () {
+  const allLetters = "abcdefghijklmnopqrstuvwxyz"
+
+  // State
   const [hiddenWord, setHiddenWord] = React.useState("react")
   const [guessedLetters, setGuessLetters] = React.useState([])
 
-  const allLetters = "abcdefghijklmnopqrstuvwxyz"
-  const languageElements = languages.map((language) => {
+  // Derived State variable
+  const numberOfIncorrectGuesses = guessedLetters.filter(
+    (letter) => !hiddenWord.includes(letter),
+  ).length
+
+  // lost game
+  const isGameLost = numberOfIncorrectGuesses >= languages.length - 1
+
+  // wong game
+  const isGameWon = [...hiddenWord].every((letter) =>
+    guessedLetters.includes(letter),
+  )
+
+  const languageElements = languages.map((language, index) => {
     const style = {
       backgroundColor: language.backgroundColor,
       color: language.color,
     }
 
+    const opacityClass =
+      index < numberOfIncorrectGuesses ? "opacity-50" : "opacity-100"
     return (
       <span
         style={style}
         key={nanoid()}
-        className={`flex h-[24.75px] items-center rounded-sm px-[8px] text-[12px] font-bold`}
+        className={`flex h-[24.75px] items-center rounded-sm px-[8px] text-[12px] font-bold ${opacityClass}`}
       >
         {language.name}
       </span>
@@ -59,6 +76,24 @@ export default function () {
       setGuessLetters([...guessedLetters, letter])
   }
 
+  const messageBGColor = isGameWon
+    ? "bg-[#10A95B]"
+    : isGameLost
+      ? "bg-[#BA2A2A]"
+      : null
+
+  const messagelogElement = isGameWon ? (
+    <>
+      <h2>You win!</h2>
+      <p>Well done! 🎉</p>
+    </>
+  ) : isGameLost ? (
+    <>
+      <h2>Game over!</h2>
+      <p>You lose! Better start learning Assembly 😭</p>
+    </>
+  ) : null
+
   return (
     <>
       <header className="w-[352px] text-center">
@@ -72,9 +107,10 @@ export default function () {
       </header>
 
       <main className="flex flex-col items-center gap-[16px]">
-        <section className="py-auto flex h-[59px] w-[352px] flex-col items-center justify-center rounded-md bg-[#10A95B] text-[#F9F4DA]">
-          <h2>You win!</h2>
-          <p>Well done! 🎉</p>
+        <section
+          className={`py-auto flex h-[59px] w-[352px] flex-col items-center justify-center rounded-md text-[#F9F4DA] ${messageBGColor}`}
+        >
+          {messagelogElement}
         </section>
 
         <section className="flex w-[300px] flex-wrap justify-center gap-[4px]">
