@@ -59,9 +59,10 @@ export default function () {
     return (
       <div
         key={nanoid()}
-        className="border[#F9F4DA] flex h-[40px] w-[40px] items-center justify-center border-b-2 bg-[#323232] text-[#F9F4DA]"
+        className={`flex h-[40px] w-[40px] items-center justify-center border-b-2 border-[#F9F4DA] bg-[#323232] text-[#F9F4DA] ${!guessedLetters.includes(letter) && "fold-bold text-red-700"}`}
       >
-        {guessedLetters.includes(letter) && letter.toUpperCase()}
+        {(isGameLost || guessedLetters.includes(letter)) &&
+          letter.toUpperCase()}
       </div>
     )
   })
